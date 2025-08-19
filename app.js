@@ -74,7 +74,15 @@ passport.use(new GitHubStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
   let user = await db.get('SELECT * FROM users WHERE github_id = ?', profile.id);
   if (!user) {
-    await db.run('INSERT INTO users (github_id, username) VALUES (?, ?)', profile.id, profile.username);
+    // Check if this is the first user
+    const userCount = await db.get('SELECT COUNT(*) as count FROM users');
+    if (userCount.count === 0) {
+      // First user: set as admin and active
+      await db.run('INSERT INTO users (github_id, username, role, active) VALUES (?, ?, ?, ?)', profile.id, profile.username, 'admin', 1);
+    } else {
+      // Other users: default role and inactive
+      await db.run('INSERT INTO users (github_id, username) VALUES (?, ?)', profile.id, profile.username);
+    }
     user = await db.get('SELECT * FROM users WHERE github_id = ?', profile.id);
   }
   return done(null, user);
