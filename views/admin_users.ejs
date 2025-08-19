@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Userbeheer</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6">Userbeheer</h1>
+    <table class="min-w-full bg-white rounded shadow">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b">GitHub Username</th>
+          <th class="py-2 px-4 border-b">Rol</th>
+          <th class="py-2 px-4 border-b">Actief</th>
+          <th class="py-2 px-4 border-b">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td class="py-2 px-4 border-b"><%= user.username %></td>
+            <td class="py-2 px-4 border-b"><%= user.role %></td>
+            <td class="py-2 px-4 border-b"><%= user.active ? 'Ja' : 'Nee' %></td>
+            <td class="py-2 px-4 border-b">
+              <% if (!user.active) { %>
+                <form method="POST" action="/admin/users/activate" class="inline">
+                  <input type="hidden" name="id" value="<%= user.id %>">
+                  <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">Activeer</button>
+                </form>
+              <% } %>
+              <form method="POST" action="/admin/users/role" class="inline">
+                <input type="hidden" name="id" value="<%= user.id %>">
+                <select name="role" class="border rounded px-2 py-1">
+                  <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
+                  <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                </select>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded ml-2">Wijzig rol</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

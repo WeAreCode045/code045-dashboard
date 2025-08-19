@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serverbeheer</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6">Serverbeheer</h1>
+    <form method="POST" action="/admin/servers/add" class="mb-6 bg-white p-4 rounded shadow">
+      <div class="flex flex-wrap gap-4 mb-2">
+        <input type="text" name="name" placeholder="Naam" required class="border rounded px-2 py-1 flex-1">
+        <input type="text" name="host" placeholder="Host" required class="border rounded px-2 py-1 flex-1">
+        <input type="text" name="username" placeholder="Gebruikersnaam" required class="border rounded px-2 py-1 flex-1">
+        <input type="password" name="password" placeholder="Wachtwoord" required class="border rounded px-2 py-1 flex-1">
+        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">Toevoegen</button>
+      </div>
+    </form>
+    <table class="min-w-full bg-white rounded shadow mb-6">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b">Naam</th>
+          <th class="py-2 px-4 border-b">Host</th>
+          <th class="py-2 px-4 border-b">Gebruikersnaam</th>
+          <th class="py-2 px-4 border-b">Acties</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% servers.forEach(server => { %>
+          <tr>
+            <td class="py-2 px-4 border-b"><%= server.name %></td>
+            <td class="py-2 px-4 border-b"><%= server.host %></td>
+            <td class="py-2 px-4 border-b"><%= server.username %></td>
+            <td class="py-2 px-4 border-b">
+              <form method="POST" action="/admin/servers/delete" class="inline">
+                <input type="hidden" name="id" value="<%= server.id %>">
+                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded">Verwijderen</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+    <h2 class="text-xl font-semibold mb-4">Toewijzen aan users</h2>
+    <form method="POST" action="/admin/servers/assign" class="bg-white p-4 rounded shadow">
+      <div class="flex flex-wrap gap-4">
+        <input type="number" name="user_id" placeholder="User ID" required class="border rounded px-2 py-1">
+        <input type="number" name="server_id" placeholder="Server ID" required class="border rounded px-2 py-1">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded">Toewijzen</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-6">Dashboard</h1>
+    <% if (user && user.role === 'admin') { %>
+      <a href="/admin/users" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Userbeheer</a>
+      <a href="/admin/servers" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Serverbeheer</a>
+    <% } %>
+    <h2 class="text-xl font-semibold mb-4">Servers</h2>
+    <table class="min-w-full bg-white rounded shadow">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 border-b">Naam</th>
+          <th class="py-2 px-4 border-b">Actie</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% servers.forEach(server => { %>
+          <tr>
+            <td class="py-2 px-4 border-b"><%= server.name %></td>
+            <td class="py-2 px-4 border-b">
+              <a href="/login-pma?server_id=<%= server.id %>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded">SSO naar phpMyAdmin</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
